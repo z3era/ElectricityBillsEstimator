@@ -15,14 +15,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE bills (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "month TEXT, " +
-                "unit REAL, " +
-                "total REAL, " +
-                "rebate REAL, " +
-                "final REAL)";
-        db.execSQL(createTable);
+        db.execSQL(
+                "CREATE TABLE bills (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "month TEXT, " +
+                        "unit REAL, " +
+                        "total REAL, " +
+                        "rebate REAL, " +
+                        "final REAL)"
+        );
     }
 
     @Override
@@ -31,3 +32,4 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 }
+

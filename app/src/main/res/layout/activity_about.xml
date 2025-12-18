@@ -67,12 +67,24 @@ Course: ICT602 – MOBILE TECHNOLOGY AND DEVELOPMENT"
         android:id="@+id/txtWebsite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="https://github.com/z3era"
+        android:text="https://github.com/z3era/ElectricityBillsEstimator"
         android:autoLink="web"
         android:textColor="#1565C0"
         android:textSize="15sp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/txtStudentInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtHowToUse"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="HOW TO USE THIS APP:\n\n1. Select the billing month.\n2. Enter electricity usage in kWh.\n3. Choose the rebate percentage.\n4. Tap CALCULATE AND SAVE to generate the bill.\n5. Tap VIEW SAVED BILLS to see saved records.\n6. Select a bill to view details or delete it."
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/txtWebsite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -84,7 +96,7 @@ Course: ICT602 – MOBILE TECHNOLOGY AND DEVELOPMENT"
         android:text="© 2025 Hazeera Maisara. All rights reserved."
         android:textSize="13sp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/txtWebsite"
+        app:layout_constraintTop_toBottomOf="@id/txtHowToUse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

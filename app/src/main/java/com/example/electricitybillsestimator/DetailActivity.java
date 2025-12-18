@@ -1,7 +1,10 @@
 package com.example.electricitybillsestimator;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,24 +15,31 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView txtMonth = findViewById(R.id.txtDetailMonth);
-        TextView txtUnit = findViewById(R.id.txtDetailUnit);
-        TextView txtTotal = findViewById(R.id.txtDetailTotal);
-        TextView txtRebate = findViewById(R.id.txtDetailRebate);
-        TextView txtFinal = findViewById(R.id.txtDetailFinal);
+        int billId = getIntent().getIntExtra("id", -1);
 
-        // Receive data from intent
-        String month = getIntent().getStringExtra("month");
-        double unit = getIntent().getDoubleExtra("unit", 0);
-        double total = getIntent().getDoubleExtra("total", 0);
-        double rebate = getIntent().getDoubleExtra("rebate", 0);
-        double finalCost = getIntent().getDoubleExtra("final", 0);
+        ((TextView)findViewById(R.id.txtDetailMonth))
+                .setText("Month: " + getIntent().getStringExtra("month"));
 
-        // Display details
-        txtMonth.setText("Month: " + month);
-        txtUnit.setText("Unit Used: " + unit + " kWh");
-        txtTotal.setText(String.format("Total Charges: RM %.2f", total));
-        txtRebate.setText("Rebate: " + rebate + "%");
-        txtFinal.setText(String.format("Final Cost: RM %.2f", finalCost));
+        ((TextView)findViewById(R.id.txtDetailUnit))
+                .setText("Unit Used: " + getIntent().getDoubleExtra("unit",0));
+
+        ((TextView)findViewById(R.id.txtDetailTotal))
+                .setText("Total Charges: RM " + getIntent().getDoubleExtra("total",0));
+
+        ((TextView)findViewById(R.id.txtDetailRebate))
+                .setText("Rebate: " + getIntent().getDoubleExtra("rebate",0) + "%");
+
+        ((TextView)findViewById(R.id.txtDetailFinal))
+                .setText("Final Cost: RM " + getIntent().getDoubleExtra("final",0));
+
+        Button btnDelete = findViewById(R.id.btnDelete);
+
+        btnDelete.setOnClickListener(v -> {
+            SQLiteDatabase db = new DBHelper(this).getWritableDatabase();
+            db.delete("bills", "id=?", new String[]{String.valueOf(billId)});
+            Toast.makeText(this, "Bill deleted", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+
     }
 }

@@ -16,7 +16,7 @@ public class HistoryActivity extends AppCompatActivity {
     ListView listViewBills;
     DBHelper dbHelper;
     ArrayList<String> billList;
-    Cursor cursor; // keep cursor accessible for click
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,51 +33,41 @@ public class HistoryActivity extends AppCompatActivity {
     private void loadBills() {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        cursor = db.rawQuery(
-                "SELECT id, month, unit, total, rebate, final FROM bills",
-                null
-        );
+        cursor = db.rawQuery("SELECT * FROM bills", null);
 
         billList.clear();
 
-        if (cursor.moveToFirst()) {
-            do {
-                String month = cursor.getString(1);
-                double finalCost = cursor.getDouble(5);
-
-                billList.add(month + "  -  RM " + String.format("%.2f", finalCost));
-            } while (cursor.moveToNext());
+        while (cursor.moveToNext()) {
+            billList.add(
+                    cursor.getString(1) +
+                            " - RM " +
+                            String.format("%.2f", cursor.getDouble(5))
+            );
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        listViewBills.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 billList
-        );
+        ));
 
-        listViewBills.setAdapter(adapter);
+        listViewBills.setOnItemClickListener((p, v, pos, id) -> {
+            cursor.moveToPosition(pos);
 
-        // CLICK LIST ITEM → OPEN DETAIL PAGE
-        listViewBills.setOnItemClickListener((parent, view, position, id) -> {
-
-            cursor.moveToPosition(position);
-
-            Intent intent = new Intent(HistoryActivity.this, DetailActivity.class);
-            intent.putExtra("month", cursor.getString(1));
-            intent.putExtra("unit", cursor.getDouble(2));
-            intent.putExtra("total", cursor.getDouble(3));
-            intent.putExtra("rebate", cursor.getDouble(4));
-            intent.putExtra("final", cursor.getDouble(5));
-
-            startActivity(intent);
+            Intent i = new Intent(this, DetailActivity.class);
+            i.putExtra("id", cursor.getInt(0));
+            i.putExtra("month", cursor.getString(1));
+            i.putExtra("unit", cursor.getDouble(2));
+            i.putExtra("total", cursor.getDouble(3));
+            i.putExtra("rebate", cursor.getDouble(4));
+            i.putExtra("final", cursor.getDouble(5));
+            startActivity(i);
         });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (cursor != null) {
-            cursor.close();
-        }
+        if (cursor != null) cursor.close();
     }
 }
